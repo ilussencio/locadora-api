@@ -51,6 +51,10 @@ public class CarroService {
 
     public void delete(UUID id) throws Exception {
         var carroModel = repository.findById(id).orElseThrow(() -> new NotFoundException("Carro não entrado com o id: "+ id));
-        repository.delete(carroModel);
+        try {
+            repository.delete(carroModel);
+        }catch (DataIntegrityViolationException e){
+            throw new DataBaseException("Violação de integridade do banco de dados");
+        }
     }
 }

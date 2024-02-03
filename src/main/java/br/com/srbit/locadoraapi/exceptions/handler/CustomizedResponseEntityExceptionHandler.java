@@ -3,6 +3,7 @@ package br.com.srbit.locadoraapi.exceptions.handler;
 import br.com.srbit.locadoraapi.exceptions.DataBaseException;
 import br.com.srbit.locadoraapi.exceptions.ExceptionResponse;
 import br.com.srbit.locadoraapi.exceptions.NotFoundException;
+import br.com.srbit.locadoraapi.exceptions.ReservConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +25,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler(DataBaseException.class)
     public final ResponseEntity<ExceptionResponse> dataBaseIntegrityViolarion(Exception ex, WebRequest request){
+        var exceptionResponse = new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ReservConflictException.class)
+    public final ResponseEntity<ExceptionResponse> reservConflictException(Exception ex, WebRequest request){
         var exceptionResponse = new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }

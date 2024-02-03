@@ -51,6 +51,10 @@ public class ClienteService {
 
     public void delete(UUID id) throws Exception{
         var clienteModel = repository.findById(id).orElseThrow(() -> new NotFoundException("Cliente não entrado com o id: "+ id));
-        repository.delete(clienteModel);
+        try {
+            repository.delete(clienteModel);
+        }catch (DataIntegrityViolationException e){
+            throw new DataBaseException("Violação de integridade do banco de dados");
+        }
     }
 }
