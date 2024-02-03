@@ -29,6 +29,8 @@ public class ClienteModel implements Serializable {
 
     private String nome;
     private String telefone;
+
+    @Column(unique = true)
     private String cpf;
 
     @CreationTimestamp(source = SourceType.DB)

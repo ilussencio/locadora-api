@@ -1,5 +1,6 @@
 package br.com.srbit.locadoraapi.exceptions.handler;
 
+import br.com.srbit.locadoraapi.exceptions.DataBaseException;
 import br.com.srbit.locadoraapi.exceptions.ExceptionResponse;
 import br.com.srbit.locadoraapi.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -19,5 +20,11 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public final ResponseEntity<ExceptionResponse> handleNotFoundException(Exception ex, WebRequest request) {
         var exceptionResponse = new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataBaseException.class)
+    public final ResponseEntity<ExceptionResponse> dataBaseIntegrityViolarion(Exception ex, WebRequest request){
+        var exceptionResponse = new ExceptionResponse(Instant.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

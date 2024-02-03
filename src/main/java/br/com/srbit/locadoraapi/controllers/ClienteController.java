@@ -22,7 +22,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteModel> save(@RequestBody @Valid ClienteRecordDTO clienteRecordDTO){
+    public ResponseEntity<ClienteModel> save(@RequestBody @Valid ClienteRecordDTO clienteRecordDTO) throws Exception{
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(clienteRecordDTO));
     }
 
@@ -32,17 +32,17 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findOne(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> findOne(@PathVariable(value = "id") UUID id) throws Exception{
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") UUID id, @RequestBody @Valid ClienteRecordDTO clienteRecordDTO){
+    public ResponseEntity<Object> update(@PathVariable(value = "id") UUID id, @RequestBody @Valid ClienteRecordDTO clienteRecordDTO) throws Exception{
         return ResponseEntity.status(HttpStatus.OK).body(service.update(clienteRecordDTO, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id) throws Exception{
         service.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso!");
     }

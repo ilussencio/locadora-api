@@ -31,6 +31,7 @@ public class CarroModel implements Serializable {
 
     private String marca;
     private String modelo;
+    @Column(unique = true)
     private String placa;
     private BigDecimal preco;
 

@@ -29,7 +29,7 @@ public class CarroController {
     }
 
     @PostMapping
-    public ResponseEntity<CarroModel> save(@RequestBody @Valid CarroRecordDTO carroRecordDTO){
+    public ResponseEntity<CarroModel> save(@RequestBody @Valid CarroRecordDTO carroRecordDTO) throws Exception{
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(carroRecordDTO));
     }
 
@@ -39,17 +39,17 @@ public class CarroController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findOne(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> findOne (@PathVariable(value = "id") UUID id) throws Exception{
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") UUID id, @RequestBody @Valid CarroRecordDTO carroRecordDTO){
+    public ResponseEntity<Object> update (@PathVariable(value = "id") UUID id, @RequestBody @Valid CarroRecordDTO carroRecordDTO) throws Exception{
         return ResponseEntity.status(HttpStatus.OK).body(service.update(carroRecordDTO, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id) throws Exception{
         service.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("Carro deletado com sucesso!");
     }
