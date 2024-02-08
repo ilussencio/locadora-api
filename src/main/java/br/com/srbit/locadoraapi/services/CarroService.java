@@ -5,6 +5,7 @@ import br.com.srbit.locadoraapi.exceptions.DataBaseException;
 import br.com.srbit.locadoraapi.exceptions.NotFoundException;
 import br.com.srbit.locadoraapi.models.CarroModel;
 import br.com.srbit.locadoraapi.repositories.CarroRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
+
 @Service
 public class CarroService {
     private final CarroRepository repository;
-
-    public CarroService(CarroRepository repository) {
-        this.repository = repository;
-    }
 
     public List<CarroModel> findAll() {
         return repository.findAll();

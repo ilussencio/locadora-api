@@ -8,26 +8,26 @@ import br.com.srbit.locadoraapi.models.CarroModel;
 import br.com.srbit.locadoraapi.models.ClienteModel;
 import br.com.srbit.locadoraapi.models.ReservaModel;
 import br.com.srbit.locadoraapi.repositories.ReservaRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.Period;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
+
 @Service
 public class ReservaService {
     private final ReservaRepository repository;
     private final ClienteService clienteService;
     private final CarroService carroService;
-
-    public ReservaService(ReservaRepository repository, ClienteService clienteService, CarroService carroService) {
-        this.repository = repository;
-        this.clienteService = clienteService;
-        this.carroService = carroService;
-    }
+    private final KafkaTemplate<String, Serializable> kafkaTemplate;
 
     public ReservaModel save(ReservaRecordDTO reservaRecordDTO) throws Exception {
         ReservaModel reservaModel = new ReservaModel();
@@ -77,14 +77,13 @@ public class ReservaService {
     }
 
     private ReservaModel getReservaModel(ReservaRecordDTO reservaRecordDTO, ReservaModel reservaModel) throws Exception {
-
         List<ReservaModel> reservasExistentes = this.findByCarro(reservaRecordDTO.carroId());
-        for (ReservaModel reservaExistente : reservasExistentes) {
-            if (verificarConflito(reservaExistente, reservaRecordDTO)) {
-                throw new ReservConflictException("O carro não esta disponivel da data solicitada");
-            }
-        }
 
+//        for (ReservaModel reservaExistente : reservasExistentes) {
+//            if (verificarConflito(reservaExistente, reservaRecordDTO)) {
+//                throw new ReservConflictException("O carro não esta disponivel da data solicitada");
+//            }
+//        }
         reservaModel.setClienteModel(clienteService.findById(reservaRecordDTO.clienteId()));
 
         CarroModel carroModel = carroService.findById(reservaRecordDTO.carroId());
@@ -96,6 +95,7 @@ public class ReservaService {
         reservaModel.setValorTotal(carroModel.getPreco().multiply(new BigDecimal(reservaRecordDTO.qtdDias())));
 
         try {
+            kafkaTemplate.send("reserva-email-topic", reservaModel);
             return repository.save(reservaModel);
         }catch (DataIntegrityViolationException e){
             throw new DataBaseException("Violação de integridade do banco de dados");
