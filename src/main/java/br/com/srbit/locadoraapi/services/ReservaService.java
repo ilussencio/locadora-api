@@ -31,7 +31,9 @@ public class ReservaService {
 
     public ReservaModel save(ReservaRecordDTO reservaRecordDTO) throws Exception {
         ReservaModel reservaModel = new ReservaModel();
-        return getReservaModel(reservaRecordDTO, reservaModel);
+        reservaModel = getReservaModel(reservaRecordDTO, reservaModel);
+        kafkaTemplate.send("reserva-email-topic", reservaModel);
+        return reservaModel;
     }
 
     public ReservaModel update(ReservaRecordDTO reservaRecordDTO, UUID id) throws Exception {
@@ -95,7 +97,6 @@ public class ReservaService {
         reservaModel.setValorTotal(carroModel.getPreco().multiply(new BigDecimal(reservaRecordDTO.qtdDias())));
 
         try {
-            kafkaTemplate.send("reserva-email-topic", reservaModel);
             return repository.save(reservaModel);
         }catch (DataIntegrityViolationException e){
             throw new DataBaseException("Violação de integridade do banco de dados");

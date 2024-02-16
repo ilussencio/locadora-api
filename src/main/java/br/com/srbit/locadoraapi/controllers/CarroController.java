@@ -2,19 +2,13 @@ package br.com.srbit.locadoraapi.controllers;
 
 import br.com.srbit.locadoraapi.dto.CarroRecordDTO;
 import br.com.srbit.locadoraapi.models.CarroModel;
-import br.com.srbit.locadoraapi.repositories.CarroRepository;
 import br.com.srbit.locadoraapi.services.CarroService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

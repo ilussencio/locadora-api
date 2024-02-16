@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: locadora-api
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:locadora_db}
@@ -10,6 +12,12 @@ spring:
     show-sql: false
 
 server:
-  port: 8080
+  port: ${PORT:0}
   servlet:
     context-path: "/api/v1"
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
