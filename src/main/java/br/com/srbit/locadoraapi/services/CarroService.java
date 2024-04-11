@@ -3,6 +3,7 @@ package br.com.srbit.locadoraapi.services;
 import br.com.srbit.locadoraapi.dto.CarroRecordDTO;
 import br.com.srbit.locadoraapi.exceptions.DataBaseException;
 import br.com.srbit.locadoraapi.exceptions.NotFoundException;
+import br.com.srbit.locadoraapi.models.AgenciaModel;
 import br.com.srbit.locadoraapi.models.CarroModel;
 import br.com.srbit.locadoraapi.repositories.CarroRepository;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Service
 public class CarroService {
     private final CarroRepository repository;
+    private final AgenciaService agenciaService;
 
     public List<CarroModel> findAll() {
         return repository.findAll();
@@ -30,6 +32,8 @@ public class CarroService {
     public CarroModel save(CarroRecordDTO carroRecordDTO) throws Exception {
         CarroModel carroModel = new CarroModel();
         BeanUtils.copyProperties(carroRecordDTO, carroModel);
+
+        carroModel.setAgencia(agenciaService.findById(carroRecordDTO.agencia()));
         try {
             return repository.save(carroModel);
         }catch (DataIntegrityViolationException e){

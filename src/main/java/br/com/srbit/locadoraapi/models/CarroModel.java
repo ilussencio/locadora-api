@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -32,6 +33,12 @@ public class CarroModel implements Serializable {
     @Column(unique = true)
     private String placa;
     private BigDecimal preco;
+
+    @ManyToOne
+    private AgenciaModel agencia;
+
+    private String fotoPrincipal;
+    private String fotoSecundaria;
 
     @CreationTimestamp(source = SourceType.DB)
     private Instant create_at;
