@@ -12,7 +12,7 @@ spring:
     show-sql: false
 
 server:
-  port: ${PORT:0}
+  port: ${PORT:9080}
   servlet:
     context-path: "/api/v1"
 eureka:

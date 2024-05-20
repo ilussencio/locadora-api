@@ -8,6 +8,8 @@ import br.com.srbit.locadoraapi.models.EnderecoModel;
 import br.com.srbit.locadoraapi.repositories.AgenciaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class AgenciaService {
     private final AgenciaRepository repository;
     private final EnderecoService enderecoService;
 
-    public List<AgenciaModel> findAll(){
-        return repository.findAll();
+    public Page<AgenciaModel> findAll(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     public AgenciaModel findById(UUID id) throws Exception{
